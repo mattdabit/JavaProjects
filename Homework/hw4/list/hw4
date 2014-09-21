@@ -1,0 +1,6 @@
+If another application were to create one of our DLists and use the DListNode 
+class we can run into problems. If the user wants to create DListNode and use
+it in some of methods of DList and the DListNode is not part of this.DList 
+then we run into issues. The DListNode in our current parameters issume that 
+the Dlist contains the specific DlistNode. For example if I create a Dlistnode 
+object and pass it through as a parameter in the remove method.

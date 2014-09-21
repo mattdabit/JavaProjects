@@ -1,0 +1,9 @@
+GRADER
+Matthew Dabit
+cs61b-asu
+
+The easiest way to create a maze without disjoint sets is to create a walls randomly in each direction without going backwards to where the maze started and to keep building on the previous walls. Putting the walls randomly will have to follow a set of rules to not close off the maze. 
+
+A)	It would go through wall randomly and if a wall has already been created in the same direction then it cannot change anything. But if not the algorithm can continue.
+
+B)	I would use the same process we used in step 2 of part one. Simply randomize it by putting all walls in an array. Randomly choose the wall at the end of the array.  Swap it to the end, then never move it again.  From the remaining walls, choose the wall that will come second-last.  Swap it to its final position, then never move it again.  So the same process as step 2.

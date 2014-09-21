@@ -1,0 +1,6 @@
+Matthew Dabit
+cs61b-asu
+Part II
+If a separate application created a DListNode and tried to pass into some of 
+our methods in DList we run into problem. If the DListNode is not a part of 
+this.DList instance methods like remove will fail.

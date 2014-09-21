@@ -1,0 +1,35 @@
+Names/Logins:
+	Trevor Dowds/cs61b-aio (submitting)
+	Matthew Dabit/cs61b-asu
+
+In WUGraph.java the data structures we used included using two hash tables for vertices and edges
+that mapped the input vertices and edges to our internal representation of both objects. Our
+internal representations can be found in graph/Vertex.java and graph/Edge.java where we created
+Vertex and Edge objects that contained information about each Vertex and Edge in our weighted,
+undirected graph. In graph/Vertex.java, this representation help information about that Vertex's
+original input, it's adajecency list, it's degree, and the node it's in the Double-Linked List of
+Vertices which was one of the fields of WUGraph. This field was a Double-Linked list of all the
+vertices that had been added to the graph, and graph/Vertex.java's DListNode reference to this
+list helped ensure that getVertices() ran in O(|V|) time because getVertices would walk though
+the entire list to get the vertices, but if at some point a vertex were removed then the node
+in the vertex list could be removed in constant time because of that reference and thus the run
+time of getVertices would always be dependent upon the number of vertices actually in the graph.
+
+In graph/Edge.java, this internal representation of Edges contains the original two vertices that
+were inputed, the weight of the edge, and two DListNode references to the DListNodes in the
+adjaceny lists of both vertices that contained the other vertex it made an edge with. These two
+DListNode references ensured that removeEdge ran in constant time and thus removeVertex ran in
+O(d) time because the direct reference to the nodes in another vertex's adjacency list allowed
+the proper vertices to be removed in constant time from the other adjacency lists.
+
+In graphalg/Kruskal.java we used a hashtable and a disjoint set to keep track of vertices already
+placed in our tree. We used getVertices on the given inputted to obtain all the vertices and then
+for each vertex we placed it in a hashtable and assigned it an integer value and then used getNeighbors
+to find all its neighbors. We created an Edge object as our internal representation of Edges found
+in graphalg/Edge.java that is completely seperate from the one in graph/Edge.java in order to maintain
+encapsulatoin and this Edge object contained the two vertices that formed the edge and the weight.
+For each neighbor we creatd an Edge object and placed it in an Edge array in order to have a list
+of all the edges. We then sorted the edges from least weight to greatest weight, and made a minimum
+spanning tree by calling the vertex and weight fields of the Edge object and using a disjoint set
+that represented the integer representation of our vertices to ensure that vertices weren't added
+more than once and that only the shortest edges were inputted.

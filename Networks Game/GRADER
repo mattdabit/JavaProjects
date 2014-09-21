@@ -1,0 +1,264 @@
+                                     GRADER
+
+Name of student running submit: Trevor Dowds
+Login of student running submit: aio
+
+Second team member's name: Matt Dabit
+Second team member's login: asu
+
+Third team member's name (if any):
+Third team member's login:
+
+IMPORTANT:  Once you've submitted Project 2 once, the same team member should
+submit always.  If a different teammate must submit, inform cs61b@cory.eecs of
+all the details.  Include a complete list of team members, and let us know
+which submission you want graded.
+
+If you've submitted your project once, or even written a substantial amount of
+code together, you may not change partners without the permission of the
+instructor.
+===============================================================================
+Does your program compile without errors?
+  Yes
+
+Have you tested your program on the 61B lab machines?
+  Yes
+
+
+Did you successfully implement game tree search?  Did you successfully
+implement alpha-beta pruning?  Are there any limitations on it?  What is the
+default number of search levels set by the one-parameter MachinePlayer
+constructor (or is it a variable-depth search)?
+  We successfully implemented game tree search using alpha-beta pruning with a default depth of 2. Once you start getting into
+  depths of four or greater, it starts taking some time for the minimax to make an add move, and a while for it to make a step
+  move.
+
+
+Describe your board evaluation function in some detail.
+  The Evaluation function is found in the Board Class and takes a Move, an integer representing the color of the player, and an
+  integer representing the number of moves already made by the player to reflect the search depth of the minimax algorithm.
+  It uses "this" board to decided the value of the move on an integer scale. It gives priority to moves that place chips in a goal area if no chips are already there and takes priority over moves that don't place chips in the goal area of the player if chips are already there. If there are no chips in the goal it returns 100 else -100. We rate each move on how many total connections the player makes on the board and substract that from the total number of connections that the opponent will have if the player makes the move. If the move made by the player creates a network for the player than the return value is Integer.MAX_VALUE minus the number of moves he had to make to get that network. If the move made by the player creates a network for the opponent then the return value is Integer.MIN_VALUE plus the number of moves the player had to make to get that network.
+
+Does your MachinePlayer use any special method of choosing the first few moves?
+  No.
+
+Is there anything else the graders should know to help them read your project?
+  No.
+
+Describe the classes, modules, and interfaces you designed before and while you
+implemented the project.  Your description should include:
+  -  A list of the classes your program uses.
+  -  A list of each of the "modules" used in or by MachinePlayer, similar to
+     the list in the "Teamwork" section of the README (but hopefully more
+     detailed).  (If you're using a list class, that should probably count as
+     a separate module.)
+  -  For each module, list the class(es) the module is implemented in.
+  -  For each module, say which of your team members implemented it.
+  -  For each module, describe its interface--specifically, the prototype and
+     behavior of each method that is available for external callers (outside
+     the module) to call.  Don't include methods that are only meant to be
+     called from within the module.
+
+     For each method, provide (1) a method prototype and (2) a complete,
+     unambiguous description of the behavior of the method/module.  This
+     description should also appear before the method in your code's comments.
+
+You will probably need to change some of your design decisions as you go; be
+sure to modify this file to reflect these changes before you submit your
+project.  Your design of classes and interfaces will be worth 10% of your
+grade.
+
+
+Classes:
+  In board package: Board.java, Cell.java
+  In list package: DList.java, DListNode.java, List.java, ListNode.java, InvalidNodeException.java, SList.java, SListNode.java
+  In player package: Player.java, MachinePlayer.java, Move.java, Best.java, NetworkTestClass.java
+
+Modules:
+  (Move Validator, Chip Connector, Network Identifier, Board Evaluator, Game Tree Search, Chip Locator, List)
+
+  Move Validator (Classes implemented in: Board.java) (Matt)
+    /**
+      * isValidMove checks if a move on "this" board done by a player of color int color is a legal move.
+      * Legal moves include not placing chips in four corners of "this" board,
+      * No chips in opponent goal, no chip can be placed in a square already occupied,
+      * Nor can there be three chips placed next to each other.
+      * @param m is the Move being validated
+      * @param color is the player making the move
+      * @return true if the move is legal and false if move is illegal
+    */
+    public boolean isValidMove(Move m, int color)
+
+    /**
+     * allMoves creates a list of all possible moves on "this" board that a player of color int color can choose from.
+     * @param color is the color (white or black) of the player
+     * @return DList is the list of all valid moves that player can do on his turn on "this" board.
+    */
+    public DList allMoves(int color)
+
+
+  Chip Connector (Classes implemented in: Board.java) (Matt)
+    /**
+      * isConnection determines whether two cells on "this" board are connected. They are connected orthogonally along
+      * on the board and if there is no chip of any color between them.
+      * @param c the cell that we want to find its unblocked neigbors for.
+      * @return DList is a list of all neigbors that are not blocked.
+    */
+    public boolean isConnection(Cell c, Cell b)
+
+    /**
+      * totalConnections tells you how many connection a player of color int color has on "this" board.
+      * @param color the color of the player
+      * @return the number of connections on this board a player has
+    */
+    public int totalConnections(int color)
+
+  Network Identifier (Classes implemented in: Board.java) (Trevor)
+    /**
+      * isNetwork checks if the player in question has a network that is unblocked.
+      * Edge cases:
+        * 1) Cannot go through the same cell twice
+        * 2) Must start from one side of the goal and go to the other side of the goal without going back to same goal
+        * 3) Needs to turn corner meaning the conncetion between chips must change direction each time.
+      * @param color the specific player we are checking to see if he has a network
+      * @return returns whether the Player has a network or not
+    */
+    public boolean hasNetwork(int color)
+
+
+  Evaluator (Classes to be implemented in: Board.java) (Matt)
+    /**
+      * evaluate() looks at "this" board and determines the favoribility of the Move m
+      * that can be made by returing a score the current board with the Move m already made on the board.
+      * higher positive scores as higher likelihoods of winning and negative scores as higher likelihoods of losing.
+      * @param m is the move being evaluated that will determine if that move will help the player to win or will cause him to lose.
+      * @param color the color of the player choosing a move.
+      * @param numOfMove is the number of moves made to get to the current board setup.
+      * @return integer that determines the favoribility of the move by the current player.
+    */
+    public int evaluate(Move m, int color, int numOfMoves) {
+
+  Game Tree Search (Classes to be implemented in: MachinePlayer.java) (Trevor)
+    /**
+      * chooses the best possible move available for "this" player on a gameboard.
+      * @return Move is the best move for whoever is playing.
+    */
+    public Move chooseMove()
+
+  Chips Location Module (Classes to be Implemented in: Board.java) (Matt)
+    /**
+      * allChips returns a Dlist of that contains Cell objects that contain information about the
+      * location of every chip of int color on the board.
+      * @param color the color of the player
+      * @return a Dlist of int arrays of the x and y coordinates
+    */
+    public DList allChips(int color)
+
+  List (From Homework 5. Implemented in Board.java and MachinePlayer.java)
+    http://www.cs.berkeley.edu/~jrs/61b/hw/hw5/list/
+
+  Interface for Board, MachinePlayer and Cell objects:
+    Board:
+      /**
+        * getCell returns a Cell object that represents the location, specified by
+        * the input parameters x and y, on the board. The Cell object contains information
+        * about whether there is a chip at the coordinate (x,y) on the board and also contains
+        * the coordinates themselves.
+        * @param x its the x coordinate
+        * @param y its the y coordinate
+        * @return Cell it return the cell at x and y
+      */
+      public Cell getCell(int x, int y)
+
+      /**
+        * setCell either places a chip or removes a chip from the location (x,y)
+        * on the board. It takes in moveKind in order to maintain the invariant that there
+        * are no more than 10 black or 10 white chips on the board in the case a step move
+        * is being made.
+        * @param int x its the x coordinate
+        * @param int y its the y coordinate
+        * @param int color its the color we want to place at x and y coordinates.
+        * @param int moveKind a stepmove or add move
+      */
+      public void setCell(int x, int y, int color, int moveKind)
+
+      /**
+        * isEmpty checks if "this" board does not have a chip on it
+        * @return return true if board is empty
+      */
+      public boolean isEmpty()
+
+      /**
+        * toString() returns a string representatation of this board
+        * @return String that displays the board as a string.
+      **/
+      public String toString()
+
+    MachinePlayer:
+      /**
+        * Creates a machine player with the given color.  Color is either 0 (black)
+        * or 1 (white). White has the first move. Sets a default search depth of 2.
+      **/
+      public MachinePlayer(int color)
+
+      /**
+        * Creates a machine player with the given color and search depth.  Color is
+        * either 0 (black) or 1 (white).  White has the first move.
+      **/
+      public MachinePlayer(int color, int searchDepth)
+
+      /**
+        * getBoard returns the board that "this" player is acing on
+        * @return Board is "this" player's representation of the board.
+      */
+      public Board getBoard()
+
+      // If the Move m is legal, records the move as a move by the opponent
+      // (updates the internal game board) and returns true.  If the move is
+      // illegal, returns false without modifying the internal state of "this"
+      // player.  This method allows your opponents to inform you of their moves.
+      public boolean opponentMove(Move m)
+
+      // If the Move m is legal, records the move as a move by "this" player
+      // (updates the internal game board) and returns true.  If the move is
+      // illegal, returns false without modifying the internal state of "this"
+      // player.  This method is used to help set up "Network problems" for your
+      // player to solve.
+      public boolean forceMove(Move m)
+
+    Cell:
+      /**
+        * Creates a cell with no x and y coordinate specifications and sets the color
+        * field to -1 to signify there is no chip.
+        */
+      public Cell()
+
+      /**
+        * Creates a cell object with a specific location (x,y) and int color.
+        * @param int x is the x coordinate of the cell being created.
+        * @param int y is the y coordinate of the cell being created.
+        * @param int color is the color of the chip being placed on that cell.
+      */
+      public Cell(int x, int y, int color)
+
+      /**
+        * areNeighbor determines whether "this" Cell is neighbors with a Cell b. Being neighbors
+        * means that these two cells are next to each other whethe diagonally, horizontally
+        * or vertically.
+        * @param Cell b is the cell that is the potential neighbor of this cell.
+        * @return boolean true if b is a neighbor of this cell or false if not.
+      */
+      public boolean areNeigbors(Cell b)
+
+      /**
+        * equals determines whether two cells are the same. Two cells being the same means they
+        * contain the same information, which means their x and y coordinates are the same and
+        * their color fields are the same value.
+        * @param Cell c is the cell being checked for equality
+        * @return boolean is true if Cell c's fields are the same as "this" cell and false if not.
+      */
+      public boolean equals(Cell c)
+
+
+
+

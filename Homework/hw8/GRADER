@@ -1,0 +1,25 @@
+GRADER file for Homework 8
+
+ Your Name:  Matthew Dabit
+Your Login:  cs61b-asu
+
+Part III.  Running time comparisons
+
+  List size         mergesort            quicksort
+      100 				4 msec			5 msec
+    1,000				51				31
+   10,000				311				155
+  100,000				1036			939
+1,000,000				16920			10454
+
+Part IV.
+
+  Is mergesort stable?  
+  Why or why not?
+
+  My mergesort is stable because it sorts the list starting with the beginning elements. If a number equals a previous number it will be placed after because I use enqueue
+
+  Is quicksort stable?  
+  Why or why not?
+
+  Quicksort is not stable because it works off pivot points. It does not matter if  the number is in the list it will be put into the equal queue. The numbers will be mixed depending on its orientaion to the pivot point.
